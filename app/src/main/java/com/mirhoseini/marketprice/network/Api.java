@@ -1,7 +1,7 @@
 package com.mirhoseini.marketprice.network;
 
-import com.mirhoseini.marketprice.network.model.RestValues;
-import com.mirhoseini.marketprice.utils.EnumTimeSpan;
+import com.mirhoseini.marketprice.network.model.RestMarketPrice;
+import com.mirhoseini.marketprice.utils.TimeSpan;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -12,5 +12,5 @@ import retrofit2.http.Query;
  */
 public interface Api {
     @GET("maket-price")
-    Call<RestValues> getMarketPriceValues(@Query("timespan") EnumTimeSpan timespan, @Query("format") String format);
+    Call<RestMarketPrice> getMarketPriceValues(@Query("timespan") TimeSpan timespan, @Query("format") String format);
 }

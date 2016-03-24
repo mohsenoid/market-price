@@ -1,11 +1,9 @@
 package com.mirhoseini.marketprice.network;
 
 import com.mirhoseini.marketprice.BuildConfig;
-import com.mirhoseini.marketprice.network.model.RestValues;
-import com.mirhoseini.marketprice.utils.EnumTimeSpan;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import com.mirhoseini.marketprice.network.model.RestMarketPrice;
+import com.mirhoseini.marketprice.utils.Constants;
+import com.mirhoseini.marketprice.utils.TimeSpan;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -19,15 +17,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by Mohsen on 24/03/16.
  */
 public class NetworkHelper {
+    static NetworkHelper instance;
 
     Retrofit mRetrofit;
     Api mApi;
 
-    @Inject
-    @Singleton
-    public NetworkHelper(String baseUrl) {
+    private NetworkHelper() {
+
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl(baseUrl)
+                .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create());
 
         //show retrofit logs if app is Debug
@@ -44,26 +42,32 @@ public class NetworkHelper {
         mApi = mRetrofit.create(Api.class);
     }
 
-    public void loadMarketPriceValues(EnumTimeSpan timeSpan, final OnNetworkFinishedListener<RestValues> listener) {
-        Call<RestValues> valuesCall = mApi.getMarketPriceValues(timeSpan, "json");
-        valuesCall.enqueue(new Callback<RestValues>() {
+    public static NetworkHelper getInstance() {
+        if (instance == null)
+            instance = new NetworkHelper();
+        return instance;
+    }
+
+    public void loadMarketPriceValues(final TimeSpan timeSpan, final OnNetworkFinishedListener<RestMarketPrice> listener) {
+        Call<RestMarketPrice> valuesCall = mApi.getMarketPriceValues(timeSpan, "json");
+        valuesCall.enqueue(new Callback<RestMarketPrice>() {
 
             @Override
-            public void onResponse(Call<RestValues> call, Response<RestValues> response) {
+            public void onResponse(Call<RestMarketPrice> call, Response<RestMarketPrice> response) {
                 if (response.isSuccess()) {
                     if (listener != null) {
-                        listener.onSuccess(response.body());
+                        listener.onSuccess(timeSpan, response.body());
                     }
                 } else {
                     if (listener != null)
-                        listener.onError(new Exception("Response is not successful!"));
+                        listener.onError(timeSpan, new Exception("Response is not successful!"));
                 }
             }
 
             @Override
-            public void onFailure(Call<RestValues> call, Throwable t) {
+            public void onFailure(Call<RestMarketPrice> call, Throwable t) {
                 if (listener != null)
-                    listener.onError(t);
+                    listener.onError(timeSpan, t);
             }
         });
     }

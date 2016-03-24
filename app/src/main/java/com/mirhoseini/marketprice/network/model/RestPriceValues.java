@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by Mohsen on 24/03/16.
  */
-public class RestValues {
+public class RestPriceValues {
     @SerializedName("y")
     private String y;
 
@@ -30,6 +30,6 @@ public class RestValues {
 
     @Override
     public String toString() {
-        return "RestValues [y = " + y + ", x = " + x + "]";
+        return "RestPriceValues [y = " + y + ", x = " + x + "]";
     }
 }
