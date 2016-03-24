@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 23
@@ -19,8 +20,34 @@ android {
     }
 }
 
+def support_version = "23.1.1"
+def dbflow_version = "3.0.0-beta5"
+def retrofit_version = "2.0.0-beta4"
+def dagger_version = "2.1"
+def okhttp_version = "3.2.0"
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
+    compile 'org.mockito:mockito-core:2.0.43-beta'
     compile 'com.android.support:appcompat-v7:23.1.1'
+    compile "com.android.support:support-v4:${support_version}"
+    compile "com.android.support:appcompat-v7:${support_version}"
+    compile "com.android.support:design:${support_version}"
+    compile "com.android.support:recyclerview-v7:${support_version}"
+    compile "com.android.support:cardview-v7:${support_version}"
+    compile 'com.mirhoseini.appsettings:appsettings:1.0.0'
+    compile 'com.mirhoseini.utils:utils:1.0.0'
+    compile "com.google.dagger:dagger:${dagger_version}"
+    compile "com.google.dagger:dagger-producers:${dagger_version}"
+    apt "com.google.dagger:dagger-compiler:${dagger_version}"
+    compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
+    compile "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
+    compile "com.github.Raizlabs.DBFlow:dbflow-sqlcipher:${dbflow_version}"
+    apt "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
+    compile "com.squareup.retrofit2:retrofit:${retrofit_version}"
+    compile "com.squareup.retrofit2:converter-gson:${retrofit_version}"
+    compile "com.squareup.okhttp3:okhttp:${okhttp_version}"
+    compile "com.squareup.okhttp3:logging-interceptor:${okhttp_version}"
+    compile 'com.jakewharton:butterknife:7.0.1'
 }
