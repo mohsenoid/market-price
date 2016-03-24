@@ -2,8 +2,7 @@ package com.mirhoseini.marketprice.network;
 
 import com.mirhoseini.marketprice.BuildConfig;
 import com.mirhoseini.marketprice.network.model.RestValues;
-
-import java.util.List;
+import com.mirhoseini.marketprice.utils.EnumTimeSpan;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -45,8 +44,8 @@ public class NetworkHelper {
         mApi = mRetrofit.create(Api.class);
     }
 
-    public void loadMarketPriceValues(final OnNetworkFinishedListener<RestValues> listener) {
-        Call<RestValues> valuesCall = mApi.getMarketPriceValues();
+    public void loadMarketPriceValues(EnumTimeSpan timeSpan, final OnNetworkFinishedListener<RestValues> listener) {
+        Call<RestValues> valuesCall = mApi.getMarketPriceValues(timeSpan, "json");
         valuesCall.enqueue(new Callback<RestValues>() {
 
             @Override
