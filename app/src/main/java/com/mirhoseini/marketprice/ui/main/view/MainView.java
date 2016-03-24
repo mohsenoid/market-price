@@ -1,7 +1,9 @@
 package com.mirhoseini.marketprice.ui.main.view;
 
-import com.mirhoseini.marketprice.database.model.MarketPrice;
+import com.mirhoseini.marketprice.database.model.PriceValue;
 import com.mirhoseini.marketprice.utils.TimeSpan;
+
+import java.util.List;
 
 /**
  * Created by Mohsen on 24/03/16.
@@ -12,7 +14,7 @@ public interface MainView {
 
     void hideProgress();
 
-    void setMarketPrice(TimeSpan timeSpan, MarketPrice marketPrice);
+    void setPriceValues(TimeSpan timeSpan, List<PriceValue> items);
 
     void showMessage(String message);
 

@@ -5,19 +5,27 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.mirhoseini.appsettings.AppSettings;
 import com.mirhoseini.marketprice.R;
-import com.mirhoseini.marketprice.database.model.MarketPrice;
+import com.mirhoseini.marketprice.database.model.PriceValue;
 import com.mirhoseini.marketprice.ui.BaseActivity;
 import com.mirhoseini.marketprice.ui.main.presenter.MainPresenter;
 import com.mirhoseini.marketprice.ui.main.presenter.MainPresenterImpl;
+import com.mirhoseini.marketprice.utils.Constants;
 import com.mirhoseini.marketprice.utils.TimeSpan;
 import com.mirhoseini.utils.Utils;
 
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnItemSelected;
 
 /**
  * Created by Mohsen on 24/03/16.
@@ -26,12 +34,20 @@ public class MainActivity extends BaseActivity implements MainView {
 
     MainPresenter mMainPresenter;
 
+    AlertDialog mInternetConnectionDialog;
+
     @Bind(R.id.list)
     RecyclerView mRecyclerView;
     @Bind(R.id.progress)
     ProgressBar mProgressBar;
+    @Bind(R.id.timespan_spinner)
+    Spinner mTimeSpan;
 
-    private AlertDialog mInternetConnectionDialog;
+
+    @OnItemSelected(R.id.timespan_spinner)
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        mMainPresenter.loadPriceValues(TimeSpan.values()[position], Utils.isConnected(this));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +56,17 @@ public class MainActivity extends BaseActivity implements MainView {
 
         ButterKnife.bind(this);
 
+        loadLastTimeSpan();
+
         mMainPresenter = new MainPresenterImpl(this);
+
+    }
+
+    private void loadLastTimeSpan() {
+        TimeSpan lastTimeSpan = TimeSpan.valueOf(AppSettings.getString(this, Constants.LAST_TIMESPAN, TimeSpan.DAY_30.getValue()));
+
+        mTimeSpan.setAdapter(new ArrayAdapter<TimeSpan>(this, android.R.layout.simple_spinner_dropdown_item, TimeSpan.values()));
+        mTimeSpan.setSelection(lastTimeSpan.getPosition());
     }
 
     @Override
@@ -51,7 +77,7 @@ public class MainActivity extends BaseActivity implements MainView {
         if (mInternetConnectionDialog != null)
             mInternetConnectionDialog.dismiss();
 
-        mMainPresenter.loadMarketPrice(TimeSpan.DAY_30, Utils.isConnected(this));
+        mMainPresenter.loadPriceValues(TimeSpan.values()[mTimeSpan.getSelectedItemPosition()], Utils.isConnected(this));
     }
 
 
@@ -65,18 +91,29 @@ public class MainActivity extends BaseActivity implements MainView {
     public void showProgress() {
         mProgressBar.setVisibility(View.VISIBLE);
         mRecyclerView.setVisibility(View.INVISIBLE);
+
+        mTimeSpan.setEnabled(false);
     }
 
     @Override
     public void hideProgress() {
         mProgressBar.setVisibility(View.INVISIBLE);
         mRecyclerView.setVisibility(View.VISIBLE);
+
+        mTimeSpan.setEnabled(true);
     }
 
 
     @Override
-    public void setMarketPrice(TimeSpan timeSpan, MarketPrice marketPrice) {
+    public void setPriceValues(TimeSpan timeSpan, List<PriceValue> items) {
         //Todo: load data to graph
+        saveLastTimeSpan(timeSpan);
+
+
+    }
+
+    private void saveLastTimeSpan(TimeSpan timeSpan) {
+        AppSettings.setValue(this, Constants.LAST_TIMESPAN, timeSpan.getPosition());
     }
 
     @Override

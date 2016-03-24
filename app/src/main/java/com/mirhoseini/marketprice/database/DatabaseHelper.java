@@ -1,11 +1,12 @@
 package com.mirhoseini.marketprice.database;
 
-import com.mirhoseini.marketprice.database.model.MarketPrice;
-import com.mirhoseini.marketprice.database.model.MarketPrice_Table;
-import com.mirhoseini.marketprice.utils.TimeSpan;
+import com.mirhoseini.marketprice.database.model.PriceValue;
+import com.mirhoseini.marketprice.database.model.PriceValue_Table;
 import com.raizlabs.android.dbflow.annotation.Database;
 import com.raizlabs.android.dbflow.sql.language.Delete;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
+
+import java.util.List;
 
 
 /**
@@ -25,20 +26,15 @@ public class DatabaseHelper {
         return instance;
     }
 
-    public MarketPrice loadMarketPrice(TimeSpan timeSpan) {
+    public List<PriceValue> loadPriceValues(int timeSpanId) {
         return SQLite.select()
-                .from(MarketPrice.class)
-                .where(MarketPrice_Table.timeSpan.is(timeSpan.getValue()))
-                .querySingle();
+                .from(PriceValue.class)
+                .where(PriceValue_Table.timeSpanId.is(timeSpanId))
+                .queryList();
     }
 
-    public void deleteAllMarketPrices() {
-        Delete.table(MarketPrice.class);
+    public void deletePriceValues(int timeSpanId) {
+        Delete.table(PriceValue.class, PriceValue_Table.timeSpanId.is(timeSpanId));
     }
-
-    public void deleteMarketPrice(TimeSpan timeSpan) {
-        Delete.table(MarketPrice.class, MarketPrice_Table.timeSpan.is(timeSpan.getValue()));
-    }
-
 
 }

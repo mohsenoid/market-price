@@ -15,5 +15,5 @@ public interface MainPresenter {
 
     boolean onBackPressed();
 
-    void loadMarketPrice(TimeSpan timeSpan, boolean isConnected);
+    void loadPriceValues(TimeSpan timeSpan, boolean isConnected);
 }

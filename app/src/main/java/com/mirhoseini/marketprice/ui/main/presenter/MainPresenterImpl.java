@@ -1,14 +1,16 @@
 package com.mirhoseini.marketprice.ui.main.presenter;
 
-import com.mirhoseini.marketprice.database.model.MarketPrice;
+import com.mirhoseini.marketprice.database.model.PriceValue;
 import com.mirhoseini.marketprice.network.converters.RestModelConverter;
 import com.mirhoseini.marketprice.network.model.RestMarketPrice;
+import com.mirhoseini.marketprice.network.model.RestPriceValue;
 import com.mirhoseini.marketprice.ui.main.model.MainInteractor;
 import com.mirhoseini.marketprice.ui.main.model.MainInteractorImpl;
 import com.mirhoseini.marketprice.ui.main.model.OnMainFinishedListener;
 import com.mirhoseini.marketprice.ui.main.view.MainView;
 import com.mirhoseini.marketprice.utils.TimeSpan;
 
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -79,14 +81,14 @@ public class MainPresenterImpl implements MainPresenter, OnMainFinishedListener 
     }
 
     @Override
-    public void loadMarketPrice(TimeSpan timeSpan, boolean isConnected) {
-        MarketPrice marketPrice = mMainInteractor.loadMarketPriceFromDatabase(timeSpan);
+    public void loadPriceValues(TimeSpan timeSpan, boolean isConnected) {
+        List<PriceValue> items = mMainInteractor.loadPriceValuesFromDatabase(timeSpan);
 
-        boolean hasData = marketPrice != null;
+        boolean hasData = items.size() > 0;
 
         if (hasData) {
             if (mMainView != null) {
-                mMainView.setMarketPrice(timeSpan, marketPrice);
+                mMainView.setPriceValues(timeSpan, items);
                 mMainView.hideProgress();
             }
         }
@@ -104,16 +106,17 @@ public class MainPresenterImpl implements MainPresenter, OnMainFinishedListener 
 
     @Override
     public void onSuccess(TimeSpan timeSpan, RestMarketPrice restMarketPrice) {
-        mMainInteractor.deleteMarketPrice(timeSpan);
+        mMainInteractor.deletePriceValues(timeSpan);
 
-        RestModelConverter.convertRestModelToMarketPrice(timeSpan, restMarketPrice).save();
+        for (RestPriceValue restPriceValue : restMarketPrice.getValues())
+            RestModelConverter.convertRestModelToPriceValue(timeSpan, restPriceValue).save();
 
-        MarketPrice marketPrice = mMainInteractor.loadMarketPriceFromDatabase(timeSpan);
-        boolean hasData = marketPrice != null;
+        List<PriceValue> items = mMainInteractor.loadPriceValuesFromDatabase(timeSpan);
+        boolean hasData = items.size() > 0;
 
         if (hasData) {
             if (mMainView != null) {
-                mMainView.setMarketPrice(timeSpan, marketPrice);
+                mMainView.setPriceValues(timeSpan, items);
             }
         }
 

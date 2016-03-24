@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by Mohsen on 24/03/16.
  */
-public class RestPriceValues {
+public class RestPriceValue {
     @SerializedName("y")
     private String y;
 

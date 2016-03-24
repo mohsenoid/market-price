@@ -2,11 +2,13 @@ package com.mirhoseini.marketprice.ui.main.model;
 
 
 import com.mirhoseini.marketprice.database.DatabaseHelper;
-import com.mirhoseini.marketprice.database.model.MarketPrice;
+import com.mirhoseini.marketprice.database.model.PriceValue;
 import com.mirhoseini.marketprice.network.NetworkHelper;
 import com.mirhoseini.marketprice.network.OnNetworkFinishedListener;
 import com.mirhoseini.marketprice.network.model.RestMarketPrice;
 import com.mirhoseini.marketprice.utils.TimeSpan;
+
+import java.util.List;
 
 
 /**
@@ -39,15 +41,15 @@ public class MainInteractorImpl implements MainInteractor {
     }
 
     @Override
-    public MarketPrice loadMarketPriceFromDatabase(TimeSpan timeSpan) {
-        MarketPrice marketPrice = mDatabaseHelper.loadMarketPrice(timeSpan);
+    public List<PriceValue> loadPriceValuesFromDatabase(TimeSpan timeSpan) {
+        List<PriceValue> items = mDatabaseHelper.loadPriceValues(timeSpan.getPosition());
 
-        return marketPrice;
+        return items;
     }
 
     @Override
-    public void deleteMarketPrice(TimeSpan timeSpan) {
-        mDatabaseHelper.deleteMarketPrice(timeSpan);
+    public void deletePriceValues(TimeSpan timeSpan) {
+        mDatabaseHelper.deletePriceValues(timeSpan.getPosition());
     }
 
     @Override

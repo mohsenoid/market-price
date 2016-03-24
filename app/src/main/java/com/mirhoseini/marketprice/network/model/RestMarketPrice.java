@@ -7,13 +7,13 @@ import com.google.gson.annotations.SerializedName;
  */
 public class RestMarketPrice {
     @SerializedName("values")
-    private RestPriceValues[] values;
+    private RestPriceValue[] values;
 
-    public RestPriceValues[] getValues() {
+    public RestPriceValue[] getValues() {
         return values;
     }
 
-    public void setValues(RestPriceValues[] values) {
+    public void setValues(RestPriceValue[] values) {
         this.values = values;
     }
 

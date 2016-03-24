@@ -1,7 +1,9 @@
 package com.mirhoseini.marketprice.ui.main.model;
 
-import com.mirhoseini.marketprice.database.model.MarketPrice;
+import com.mirhoseini.marketprice.database.model.PriceValue;
 import com.mirhoseini.marketprice.utils.TimeSpan;
+
+import java.util.List;
 
 /**
  * Created by Mohsen on 24/03/16.
@@ -9,9 +11,9 @@ import com.mirhoseini.marketprice.utils.TimeSpan;
 public interface MainInteractor {
     void loadMarketPrice(TimeSpan timeSpan, OnMainFinishedListener listener);
 
-    MarketPrice loadMarketPriceFromDatabase(TimeSpan timeSpan);
+    List<PriceValue> loadPriceValuesFromDatabase(TimeSpan timeSpan);
 
-    void deleteMarketPrice(TimeSpan timeSpan);
+    void deletePriceValues(TimeSpan timeSpan);
 
     void onDestroy();
 }

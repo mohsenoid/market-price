@@ -9,27 +9,31 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 /**
  * Created by Mohsen on 24/03/16.
  */
-@Table(database = DatabaseHelper.class, name = "pricevalues")
-public class PriceValues extends BaseModel {
+@Table(database = DatabaseHelper.class, name = "pricevalue")
+public class PriceValue extends BaseModel {
+    @PrimaryKey
+    private int timeSpanId;
     @PrimaryKey
     private String x;
     @Column
     private String y;
 
-    public PriceValues(String x, String y) {
-        this.y = y;
+
+    public PriceValue(int timeSpanId, String x, String y) {
+        this.timeSpanId = timeSpanId;
         this.x = x;
-    }
-
-    public PriceValues() {
-    }
-
-    public String getY() {
-        return y;
-    }
-
-    public void setY(String y) {
         this.y = y;
+    }
+
+    public PriceValue() {
+    }
+
+    public int getTimeSpanId() {
+        return timeSpanId;
+    }
+
+    public void setTimeSpanId(int timeSpanId) {
+        this.timeSpanId = timeSpanId;
     }
 
     public String getX() {
@@ -40,9 +44,17 @@ public class PriceValues extends BaseModel {
         this.x = x;
     }
 
+    public String getY() {
+        return y;
+    }
+
+    public void setY(String y) {
+        this.y = y;
+    }
+
     @Override
     public String toString() {
-        return "PriceValues [y = " + y + ", x = " + x + "]";
+        return "PriceValue [timeSpanId = " + timeSpanId + ", x = " + x + ", y = " + y + "]";
     }
 
 }
