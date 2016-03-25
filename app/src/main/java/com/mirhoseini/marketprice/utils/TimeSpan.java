@@ -7,7 +7,7 @@ import java.util.List;
  * Created by Mohsen on 24/03/16.
  */
 public enum TimeSpan {
-    DAY_30(0, "30days"), DAY_60(1, "60days"), DAY_180(2, "180days"), YEAR_1(3, "1year"), YEAR_2(4, "2year"), ALL(5, "all");
+    DAY_30(0, "30days"), DAY_60(1, "60days"), DAY_180(2, "180days"), YEAR_1(3, "1year"), YEAR_2(4, "2year");//, ALL(5, "all");
 
     static ArrayList<String> values;
 
