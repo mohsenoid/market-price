@@ -31,6 +31,8 @@ public class MainPresenterImpl implements MainPresenter, OnMainNetworkFinishedLi
 
         mMainInteractor = new MainInteractorImpl();
 
+        sDoubleBackToExitPressedOnce = false;
+        sOfflineMessageShowedOnce = false;
         sIsLoadingData = false;
     }
 

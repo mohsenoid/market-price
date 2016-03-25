@@ -212,7 +212,7 @@ public class MainActivity extends BaseActivity implements MainView {
 
     @Override
     public void showRetryMessage() {
-        Snackbar.make(mGraph, R.string.retry_message, Snackbar.LENGTH_INDEFINITE)
+        Snackbar.make(mGraph, R.string.retry_message, Snackbar.LENGTH_LONG)
                 .setAction(R.string.load_retry, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
