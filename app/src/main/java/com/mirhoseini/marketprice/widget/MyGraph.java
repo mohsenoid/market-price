@@ -23,7 +23,6 @@ import java.util.Vector;
  * Created by Mohsen on 25/03/16.
  */
 public class MyGraph extends View implements SurfaceHolder.Callback {
-    static final String TAG = MyGraph.class.getSimpleName();
     static final int STROKE_WIDTH = 4;
 
     int width, height;
@@ -79,8 +78,6 @@ public class MyGraph extends View implements SurfaceHolder.Callback {
 
     private void calcPoints() {
         if (mPriceValues != null && mPriceValues.size() > 0) {
-            Log.i(TAG, "1: " + Calendar.getInstance().getTimeInMillis() + "");
-
             //finding Max and Min
             maxX = minX = mPriceValues.get(0).getX();
             maxY = minY = mPriceValues.get(0).getY();
@@ -93,10 +90,8 @@ public class MyGraph extends View implements SurfaceHolder.Callback {
                 minY = Math.min(minY, mPriceValues.get(i).getY());
             }
 
-            Log.i(TAG, "2: " + Calendar.getInstance().getTimeInMillis() + "");
-
-            xFactor = width / mPriceValues.size();
-            yFactor = height / (float) (Math.ceil(maxY) - Math.floor(minY));
+            xFactor = (float) width / (float) mPriceValues.size();
+            yFactor = (float) height / (float) (Math.ceil(maxY) - Math.floor(minY));
 
             mPoints = new float[(mPriceValues.size() - 1) * 4];
 
@@ -113,23 +108,13 @@ public class MyGraph extends View implements SurfaceHolder.Callback {
     }
 
     private void drawGraphLines(Canvas canvas) {
-        Log.i(TAG, "3: " + Calendar.getInstance().getTimeInMillis() + "");
 
         if (mPoints == null) {
             return;
         }
 
-//        Path path = new Path();
-//        path.moveTo(mPoints[0], mPoints[1]);
-//        for (int i = 2; i < mPoints.length; i += 2) {
-//            path.lineTo(mPoints[i], mPoints[i + 1]);
-//        }
-//
-//        canvas.drawPath(path, linePaint);
-
         canvas.drawLines(mPoints, linePaint);
 
-        Log.i(TAG, "4: " + Calendar.getInstance().getTimeInMillis() + "");
     }
 
     private void drawGraphBorders(Canvas canvas) {
