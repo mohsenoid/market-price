@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by Mohsen on 24/03/16.
  */
-@Database(name = DatabaseHelper.NAME, version = DatabaseHelper.VERSION) , sqlHelperClass = SQLCipherHelperImpl.class)
+@Database(name = DatabaseHelper.NAME, version = DatabaseHelper.VERSION, sqlHelperClass = SQLCipherHelperImpl.class)
 public class DatabaseHelper {
     public static final String NAME = "market_db";
     public static final int VERSION = 1;
