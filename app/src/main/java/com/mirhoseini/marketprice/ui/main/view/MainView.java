@@ -18,6 +18,8 @@ public interface MainView {
 
     void showMessage(String message);
 
+    void showOfflineMessage();
+
     void exit();
 
     void showExitMessage();

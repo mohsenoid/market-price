@@ -123,6 +123,19 @@ public class MainActivity extends BaseActivity implements MainView {
     }
 
     @Override
+    public void showOfflineMessage() {
+        Snackbar.make(mGraph, R.string.offline_message, Snackbar.LENGTH_LONG)
+                .setAction(R.string.go_online, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mContext.startActivity(new Intent(
+                                Settings.ACTION_WIFI_SETTINGS));
+                    }
+                })
+                .show();
+    }
+
+    @Override
     public void exit() {
         Utils.exit(this);
     }

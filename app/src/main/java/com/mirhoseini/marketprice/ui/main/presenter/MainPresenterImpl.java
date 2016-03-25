@@ -19,11 +19,11 @@ import java.util.TimerTask;
  * Created by Mohsen on 24/03/16.
  */
 public class MainPresenterImpl implements MainPresenter, OnMainFinishedListener {
+    private static boolean sDoubleBackToExitPressedOnce;
+    private static boolean sOfflineMessageShowedOnce;
+
     MainInteractor mMainInteractor;
-
     private MainView mMainView;
-
-    private boolean mDoubleBackToExitPressedOnce;
 
     public MainPresenterImpl(MainView mainView) {
         this.mMainView = mainView;
@@ -38,7 +38,7 @@ public class MainPresenterImpl implements MainPresenter, OnMainFinishedListener 
             mMainView.showProgress();
         }
 
-        mDoubleBackToExitPressedOnce = false;
+        sDoubleBackToExitPressedOnce = false;
 
     }
 
@@ -56,13 +56,13 @@ public class MainPresenterImpl implements MainPresenter, OnMainFinishedListener 
 
     @Override
     public boolean onBackPressed() {
-        if (mDoubleBackToExitPressedOnce) {
+        if (sDoubleBackToExitPressedOnce) {
             if (mMainView != null) {
                 mMainView.exit();
             }
             return false;
         }
-        mDoubleBackToExitPressedOnce = true;
+        sDoubleBackToExitPressedOnce = true;
 
         if (mMainView != null) {
             mMainView.showExitMessage();
@@ -73,7 +73,7 @@ public class MainPresenterImpl implements MainPresenter, OnMainFinishedListener 
 
             @Override
             public void run() {
-                mDoubleBackToExitPressedOnce = false;
+                sDoubleBackToExitPressedOnce = false;
             }
         }, 2500);
 
@@ -86,25 +86,20 @@ public class MainPresenterImpl implements MainPresenter, OnMainFinishedListener 
 
         boolean hasData = items.size() > 0;
 
-        if (hasData) {
-            if (mMainView != null) {
-
-            }
-        }
-
-//        if (!AppApplication.sSessionCategoryUpdated) {
         if (isConnected)
             mMainInteractor.loadMarketPrice(timeSpan, this);
         else if (hasData) {
             mMainView.setPriceValues(timeSpan, items);
             mMainView.hideProgress();
-            mMainView.showMessage("Working offline!");
+            if (!sOfflineMessageShowedOnce) {
+                mMainView.showOfflineMessage();
+                sOfflineMessageShowedOnce = true;
+            }
         } else {
             if (mMainView != null) {
                 mMainView.showConnectionError();
             }
         }
-//        }
     }
 
     @Override
@@ -115,6 +110,7 @@ public class MainPresenterImpl implements MainPresenter, OnMainFinishedListener 
             RestModelConverter.convertRestModelToPriceValue(timeSpan, restPriceValue).save();
 
         List<PriceValue> items = mMainInteractor.loadPriceValuesFromDatabase(timeSpan);
+
         boolean hasData = items.size() > 0;
 
         if (hasData) {
@@ -125,7 +121,6 @@ public class MainPresenterImpl implements MainPresenter, OnMainFinishedListener 
 
         mMainView.hideProgress();
 
-//        AppApplication.sSessionCategoryUpdated = true;
     }
 
     @Override
