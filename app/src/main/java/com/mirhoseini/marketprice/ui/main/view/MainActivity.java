@@ -13,10 +13,6 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
 import com.mirhoseini.appsettings.AppSettings;
 import com.mirhoseini.marketprice.R;
 import com.mirhoseini.marketprice.database.model.PriceValue;
@@ -25,9 +21,9 @@ import com.mirhoseini.marketprice.ui.main.presenter.MainPresenter;
 import com.mirhoseini.marketprice.ui.main.presenter.MainPresenterImpl;
 import com.mirhoseini.marketprice.utils.Constants;
 import com.mirhoseini.marketprice.utils.TimeSpan;
+import com.mirhoseini.marketprice.widget.MyGraph;
 import com.mirhoseini.utils.Utils;
 
-import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -44,7 +40,7 @@ public class MainActivity extends BaseActivity implements MainView {
     AlertDialog mInternetConnectionDialog;
 
     @Bind(R.id.graph)
-    GraphView mGraph;
+    MyGraph mGraph;
     @Bind(R.id.progress)
     ProgressBar mProgressBar;
     @Bind(R.id.timespan_spinner)
@@ -120,20 +116,22 @@ public class MainActivity extends BaseActivity implements MainView {
         //Todo: load data to graph
         saveLastTimeSpan(timeSpan);
 
-        DataPoint[] data = new DataPoint[items.size()];
-        for (int i = 0; i < items.size(); i++) {
-            data[i] = new DataPoint(new Date(items.get(i).getX() * 1000), items.get(i).getY());
-        }
+//        DataPoint[] data = new DataPoint[items.size()];
+//        for (int i = 0; i < items.size(); i++) {
+//            data[i] = new DataPoint(new Date(items.get(i).getX() * 1000), items.get(i).getY());
+//        }
 
-        mGraph.removeAllSeries();
+//        mGraph.removeAllSeries();
+//
+//        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(data);
+//
+//        mGraph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(mContext));
+//        mGraph.getGridLabelRenderer().setNumHorizontalLabels(4);
+//        mGraph.getViewport().setScalable(true);
+//        mGraph.getViewport().setScrollable(true);
+//        mGraph.addSeries(series);
 
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(data);
-
-        mGraph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(mContext));
-        mGraph.getGridLabelRenderer().setNumHorizontalLabels(4);
-        mGraph.getViewport().setScalable(true);
-        mGraph.getViewport().setScrollable(true);
-        mGraph.addSeries(series);
+        mGraph.setPriceValues(items);
     }
 
     private void saveLastTimeSpan(TimeSpan timeSpan) {
