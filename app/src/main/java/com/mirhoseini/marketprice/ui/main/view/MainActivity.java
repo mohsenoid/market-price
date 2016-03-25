@@ -3,6 +3,7 @@ package com.mirhoseini.marketprice.ui.main.view;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
@@ -50,12 +51,6 @@ public class MainActivity extends BaseActivity implements MainView {
 
     Context mContext;
 
-
-    @OnItemSelected(R.id.timespan_spinner)
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        mMainPresenter.loadPriceValues(TimeSpan.values()[position], Utils.isConnected(this));
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,17 +60,43 @@ public class MainActivity extends BaseActivity implements MainView {
 
         ButterKnife.bind(this);
 
-        loadLastTimeSpan();
+        int lastTimeSpan;
+
+        if (savedInstanceState == null) //load lastTimeSpan from SharePreferences
+            lastTimeSpan = AppSettings.getInt(this, Constants.LAST_TIMESPAN, TimeSpan.DAY_30.getPosition());
+        else //load lastTimeSpan from saved before UI change
+            lastTimeSpan = savedInstanceState.getInt(Constants.LAST_TIMESPAN);
+
+        loadTimeSpanSpinner(lastTimeSpan);
 
         mMainPresenter = new MainPresenterImpl(this);
 
     }
 
-    private void loadLastTimeSpan() {
-        TimeSpan lastTimeSpan = TimeSpan.fromValue(AppSettings.getString(this, Constants.LAST_TIMESPAN, TimeSpan.DAY_30.getValue()));
+    private void loadTimeSpanSpinner(int savedTimeSpan) {
+        TimeSpan lastTimeSpan = TimeSpan.fromPosition(savedTimeSpan);
 
         mTimeSpan.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, TimeSpan.getValues()));
         mTimeSpan.setSelection(lastTimeSpan.getPosition());
+
+        //set onItemSelectedListener after spinner data adapter loaded and avoid unwanted loadPriceValues before item selected
+        mTimeSpan.post(new Runnable() {
+            @Override
+            public void run() {
+                mTimeSpan.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        mMainPresenter.loadPriceValues(TimeSpan.values()[position], Utils.isConnected(mContext));
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+                        // nothing to do...
+                    }
+                });
+            }
+        });
+
     }
 
     @Override
@@ -92,8 +113,10 @@ public class MainActivity extends BaseActivity implements MainView {
 
     @Override
     protected void onDestroy() {
+
         mMainPresenter.onDestroy();
         super.onDestroy();
+
     }
 
     @Override
@@ -103,6 +126,7 @@ public class MainActivity extends BaseActivity implements MainView {
         mGraph.setVisibility(View.INVISIBLE);
 
         mTimeSpan.setEnabled(false);
+
     }
 
     @Override
@@ -112,6 +136,7 @@ public class MainActivity extends BaseActivity implements MainView {
         mGraph.setVisibility(View.VISIBLE);
 
         mTimeSpan.setEnabled(true);
+
     }
 
 
@@ -140,12 +165,12 @@ public class MainActivity extends BaseActivity implements MainView {
     }
 
     private void saveLastTimeSpan(TimeSpan timeSpan) {
-        AppSettings.setValue(this, Constants.LAST_TIMESPAN, timeSpan.getValue());
+        AppSettings.setValue(this, Constants.LAST_TIMESPAN, timeSpan.getPosition());
     }
 
     @Override
     public void showToastMessage(String message) {
-        Snackbar.make(mGraph, message, Snackbar.LENGTH_LONG).show();
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -163,6 +188,7 @@ public class MainActivity extends BaseActivity implements MainView {
                                 Settings.ACTION_WIFI_SETTINGS));
                     }
                 })
+                .setActionTextColor(Color.GREEN)
                 .show();
     }
 
@@ -185,9 +211,31 @@ public class MainActivity extends BaseActivity implements MainView {
     }
 
     @Override
+    public void showRetryMessage() {
+        Snackbar.make(mGraph, R.string.retry_message, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.load_retry, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mMainPresenter.loadPriceValues(TimeSpan.values()[mTimeSpan.getSelectedItemPosition()], Utils.isConnected(mContext));
+                    }
+                })
+                .setActionTextColor(Color.RED)
+                .show();
+    }
+
+    @Override
     public void onBackPressed() {
         if (mMainPresenter.onBackPressed()) {
             super.onBackPressed();
         }
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        //save TimeSpan selected by user before data loaded and saved to SharedPreferences
+        outState.putInt(Constants.LAST_TIMESPAN, mTimeSpan.getSelectedItemPosition());
+    }
+
 }

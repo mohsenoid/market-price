@@ -31,8 +31,6 @@ public class MainPresenterImpl implements MainPresenter, OnMainNetworkFinishedLi
 
         mMainInteractor = new MainInteractorImpl();
 
-        sDoubleBackToExitPressedOnce = false;
-        sOfflineMessageShowedOnce = false;
         sIsLoadingData = false;
     }
 
@@ -50,6 +48,7 @@ public class MainPresenterImpl implements MainPresenter, OnMainNetworkFinishedLi
 
     @Override
     public void onDestroy() {
+        //delete all references with UI destruction
         mMainView = null;
         mMainInteractor.onDestroy();
         mMainInteractor = null;
@@ -88,40 +87,47 @@ public class MainPresenterImpl implements MainPresenter, OnMainNetworkFinishedLi
 
             if (mMainView != null) {
                 mMainView.showProgress();
-            }
-
-            if (mMainView != null) {
                 mMainView.showProgressMessage("Loading Price Values...");
             }
 
-            List<PriceValue> items = mMainInteractor.loadPriceValuesFromDatabase(timeSpan);
+            if (mMainInteractor != null) {//check if object is not destroyed
 
-            boolean hasData = items.size() > 0;
+                List<PriceValue> items = mMainInteractor.loadPriceValuesFromDatabase(timeSpan);
 
-            if (isConnected) {
+                boolean hasData = items.size() > 0;
 
-                mMainInteractor.loadMarketPrice(timeSpan, this);
+                if (isConnected) {
 
-            } else if (hasData) {
+                    mMainInteractor.loadMarketPrice(timeSpan, this);
 
-                mMainView.setPriceValues(timeSpan, items);
-                mMainView.hideProgress();
-                sIsLoadingData = false;
+                } else if (hasData) {
 
-                if (!sOfflineMessageShowedOnce) {
-                    mMainView.showOfflineMessage();
-                    sOfflineMessageShowedOnce = true;
+                    if (mMainView != null) {
+                        mMainView.setPriceValues(timeSpan, items);
+                        mMainView.hideProgress();
+                    }
+                    sIsLoadingData = false;
+
+                    if (!sOfflineMessageShowedOnce) {
+
+                        if (mMainView != null) {
+                            mMainView.showOfflineMessage();
+                        }
+                        sOfflineMessageShowedOnce = true;
+
+                    }
+
+                } else { // network connection is required for the first time with no cached data
+
+                    if (mMainView != null) {
+                        mMainView.showConnectionError();
+                    }
+
                 }
-
-            } else {
-
-                if (mMainView != null) {
-                    mMainView.showConnectionError();
-                }
-
             }
         }
     }
+
 
     @Override
     public void onNetworkSuccess(TimeSpan timeSpan, RestMarketPrice restMarketPrice) {
@@ -129,7 +135,8 @@ public class MainPresenterImpl implements MainPresenter, OnMainNetworkFinishedLi
             mMainView.showProgressMessage("Saving Price Values to Database...");
         }
 
-        if (mMainInteractor != null && timeSpan != null)//check if object is still available
+        if (mMainInteractor != null) {//check if object is not destroyed
+
             mMainInteractor.saveMarketPrice(timeSpan, restMarketPrice, new OnMainDatabaseFinishedListener() {
                 @Override
                 public void onDatabaseSuccess(TimeSpan timeSpan) {
@@ -137,21 +144,25 @@ public class MainPresenterImpl implements MainPresenter, OnMainNetworkFinishedLi
                         mMainView.showProgressMessage("Preparing Graph...");
                     }
 
-                    List<PriceValue> items = mMainInteractor.loadPriceValuesFromDatabase(timeSpan);
+                    if (mMainInteractor != null) {//check if object is not destroyed
 
-                    boolean hasData = items.size() > 0;
+                        List<PriceValue> items = mMainInteractor.loadPriceValuesFromDatabase(timeSpan);
 
-                    if (hasData) {
-                        if (mMainView != null) {
-                            mMainView.setPriceValues(timeSpan, items);
+                        boolean hasData = items.size() > 0;
+
+                        if (hasData) {
+                            if (mMainView != null) {
+                                mMainView.setPriceValues(timeSpan, items);
+                            }
                         }
+
+                        mMainView.hideProgress();
+
+                        sIsLoadingData = false;
                     }
-
-                    mMainView.hideProgress();
-
-                    sIsLoadingData = false;
                 }
             });
+        }
 
     }
 
@@ -160,10 +171,30 @@ public class MainPresenterImpl implements MainPresenter, OnMainNetworkFinishedLi
 
         if (mMainView != null) {
             mMainView.showToastMessage(throwable.getMessage());
+        }
+
+        if (mMainInteractor != null) {//check if object is not destroyed
+
+            List<PriceValue> items = mMainInteractor.loadPriceValuesFromDatabase(timeSpan);
+
+            boolean hasData = items.size() > 0;
+
+            if (hasData) {
+
+                if (mMainView != null) {
+                    mMainView.setPriceValues(timeSpan, items);
+                }
+
+            }
+        }
+
+        if (mMainView != null) {
             mMainView.hideProgress();
+            mMainView.showRetryMessage();
         }
 
         sIsLoadingData = false;
+
     }
 
 }

@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Market Price</string>
     <string name="timespan">TimeSpan</string>
-    <string name="offline_message">Working offline!</string>
+    <string name="offline_message">No Internet Connection, offline data!</string>
     <string name="go_online">Go Online</string>
+    <string name="retry_message">Network error, offline data!</string>
+    <string name="load_retry">Retry</string>
 </resources>

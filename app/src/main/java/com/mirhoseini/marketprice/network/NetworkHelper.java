@@ -5,6 +5,8 @@ import com.mirhoseini.marketprice.network.model.RestMarketPrice;
 import com.mirhoseini.marketprice.utils.Constants;
 import com.mirhoseini.marketprice.utils.TimeSpan;
 
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -28,14 +30,17 @@ public class NetworkHelper {
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create());
 
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        httpClient.connectTimeout(30, TimeUnit.SECONDS);
+
         //show retrofit logs if app is Debug
         if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-            OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
             httpClient.addInterceptor(logging);
-            builder.client(httpClient.build());
         }
+
+        builder.client(httpClient.build());
 
         mRetrofit = builder.build();
 

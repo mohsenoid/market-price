@@ -28,4 +28,5 @@ public interface MainView {
 
     void showConnectionError();
 
+    void showRetryMessage();
 }
