@@ -128,10 +128,12 @@ public class MainActivity extends BaseActivity implements MainView {
         mGraph.removeAllSeries();
 
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(data);
+
         mGraph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(mContext));
         mGraph.getGridLabelRenderer().setNumHorizontalLabels(4);
+        mGraph.getViewport().setScalable(true);
+        mGraph.getViewport().setScrollable(true);
         mGraph.addSeries(series);
-
     }
 
     private void saveLastTimeSpan(TimeSpan timeSpan) {
