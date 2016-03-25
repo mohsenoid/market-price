@@ -11,15 +11,14 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
  */
 @Table(database = DatabaseHelper.class, name = "pricevalue")
 public class PriceValue extends BaseModel {
-//    @PrimaryKey
-    @Column
+    @PrimaryKey
     private int timeSpanId;
     @PrimaryKey
-    private String x;
+    private long x;//timestamp
     @Column
-    private String y;
+    private float y;
 
-    public PriceValue(int timeSpanId, String x, String y) {
+    public PriceValue(int timeSpanId, long x, float y) {
         this.timeSpanId = timeSpanId;
         this.x = x;
         this.y = y;
@@ -36,19 +35,19 @@ public class PriceValue extends BaseModel {
         this.timeSpanId = timeSpanId;
     }
 
-    public String getX() {
+    public long getX() {
         return x;
     }
 
-    public void setX(String x) {
+    public void setX(long x) {
         this.x = x;
     }
 
-    public String getY() {
+    public float getY() {
         return y;
     }
 
-    public void setY(String y) {
+    public void setY(float y) {
         this.y = y;
     }
 

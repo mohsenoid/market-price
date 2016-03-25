@@ -10,6 +10,6 @@ import com.mirhoseini.marketprice.utils.TimeSpan;
 public class RestModelConverter {
 
     public static PriceValue convertRestModelToPriceValue(TimeSpan timeSpan, RestPriceValue restPriceValue) {
-        return new PriceValue(timeSpan.getPosition(), restPriceValue.getX(), restPriceValue.getY());
+        return new PriceValue(timeSpan.getPosition(), Long.parseLong(restPriceValue.getX()), Float.parseFloat(restPriceValue.getY()));
     }
 }
