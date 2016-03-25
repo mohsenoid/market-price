@@ -16,7 +16,9 @@ public interface MainView {
 
     void setPriceValues(TimeSpan timeSpan, List<PriceValue> items);
 
-    void showMessage(String message);
+    void showToastMessage(String message);
+
+    void showProgressMessage(String message);
 
     void showOfflineMessage();
 

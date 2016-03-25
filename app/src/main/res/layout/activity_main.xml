@@ -47,11 +47,23 @@
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin">
 
-            <ProgressBar
+            <LinearLayout
                 android:id="@+id/progress"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center" />
+                android:layout_height="wrap_content"   android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center" />
+
+                <TextView
+                    android:id="@+id/progress_message"   android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="loading" />
+            </LinearLayout>
 
             <com.mirhoseini.marketprice.widget.MyGraph
                 android:id="@+id/graph"

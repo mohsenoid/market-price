@@ -46,5 +46,5 @@ dependencies {
     compile "com.squareup.okhttp3:okhttp:${okhttp_version}"
     compile "com.squareup.okhttp3:logging-interceptor:${okhttp_version}"
     compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'com.jjoe64:graphview:4.0.1'
+//    compile 'com.jjoe64:graphview:4.0.1'
 }

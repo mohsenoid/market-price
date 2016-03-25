@@ -6,9 +6,9 @@ import com.mirhoseini.marketprice.utils.TimeSpan;
 /**
  * Created by Mohsen on 24/03/16.
  */
-public interface OnMainFinishedListener {
+public interface OnMainNetworkFinishedListener {
 
-    void onSuccess(TimeSpan timeSpan, RestMarketPrice restMarketPrice);
+    void onNetworkSuccess(TimeSpan timeSpan, RestMarketPrice restMarketPrice);
 
-    void onError(TimeSpan timeSpan, Throwable throwable);
+    void onNetworkError(TimeSpan timeSpan, Throwable throwable);
 }

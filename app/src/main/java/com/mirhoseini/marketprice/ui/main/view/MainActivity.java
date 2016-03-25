@@ -9,8 +9,8 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mirhoseini.appsettings.AppSettings;
@@ -42,7 +42,9 @@ public class MainActivity extends BaseActivity implements MainView {
     @Bind(R.id.graph)
     MyGraph mGraph;
     @Bind(R.id.progress)
-    ProgressBar mProgressBar;
+    View mProgress;
+    @Bind(R.id.progress_message)
+    TextView mProgressMessage;
     @Bind(R.id.timespan_spinner)
     Spinner mTimeSpan;
 
@@ -96,7 +98,8 @@ public class MainActivity extends BaseActivity implements MainView {
 
     @Override
     public void showProgress() {
-        mProgressBar.setVisibility(View.VISIBLE);
+
+        mProgress.setVisibility(View.VISIBLE);
         mGraph.setVisibility(View.INVISIBLE);
 
         mTimeSpan.setEnabled(false);
@@ -104,7 +107,8 @@ public class MainActivity extends BaseActivity implements MainView {
 
     @Override
     public void hideProgress() {
-        mProgressBar.setVisibility(View.INVISIBLE);
+
+        mProgress.setVisibility(View.INVISIBLE);
         mGraph.setVisibility(View.VISIBLE);
 
         mTimeSpan.setEnabled(true);
@@ -113,7 +117,7 @@ public class MainActivity extends BaseActivity implements MainView {
 
     @Override
     public void setPriceValues(TimeSpan timeSpan, List<PriceValue> items) {
-        //Todo: load data to graph
+
         saveLastTimeSpan(timeSpan);
 
 //        DataPoint[] data = new DataPoint[items.size()];
@@ -139,8 +143,13 @@ public class MainActivity extends BaseActivity implements MainView {
     }
 
     @Override
-    public void showMessage(String message) {
+    public void showToastMessage(String message) {
         Snackbar.make(mGraph, message, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showProgressMessage(String message) {
+        mProgressMessage.setText(message);
     }
 
     @Override
