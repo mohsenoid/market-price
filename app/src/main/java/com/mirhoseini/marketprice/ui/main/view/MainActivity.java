@@ -120,6 +120,8 @@ public class MainActivity extends BaseActivity implements MainView {
 
         saveLastTimeSpan(timeSpan);
 
+        mGraph.setPriceValues(items);
+
 //        DataPoint[] data = new DataPoint[items.size()];
 //        for (int i = 0; i < items.size(); i++) {
 //            data[i] = new DataPoint(new Date(items.get(i).getX() * 1000), items.get(i).getY());
@@ -135,7 +137,6 @@ public class MainActivity extends BaseActivity implements MainView {
 //        mGraph.getViewport().setScrollable(true);
 //        mGraph.addSeries(series);
 
-        mGraph.setPriceValues(items);
     }
 
     private void saveLastTimeSpan(TimeSpan timeSpan) {
