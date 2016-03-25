@@ -88,15 +88,18 @@ public class MainPresenterImpl implements MainPresenter, OnMainFinishedListener 
 
         if (hasData) {
             if (mMainView != null) {
-                mMainView.setPriceValues(timeSpan, items);
-                mMainView.hideProgress();
+
             }
         }
 
 //        if (!AppApplication.sSessionCategoryUpdated) {
         if (isConnected)
             mMainInteractor.loadMarketPrice(timeSpan, this);
-        else if (!hasData) {
+        else if (hasData) {
+            mMainView.setPriceValues(timeSpan, items);
+            mMainView.hideProgress();
+            mMainView.showMessage("Working offline!");
+        } else {
             if (mMainView != null) {
                 mMainView.showConnectionError();
             }

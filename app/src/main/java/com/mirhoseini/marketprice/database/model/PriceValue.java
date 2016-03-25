@@ -11,13 +11,13 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
  */
 @Table(database = DatabaseHelper.class, name = "pricevalue")
 public class PriceValue extends BaseModel {
-    @PrimaryKey
+//    @PrimaryKey
+    @Column
     private int timeSpanId;
     @PrimaryKey
     private String x;
     @Column
     private String y;
-
 
     public PriceValue(int timeSpanId, String x, String y) {
         this.timeSpanId = timeSpanId;

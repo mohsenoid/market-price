@@ -63,9 +63,9 @@ public class MainActivity extends BaseActivity implements MainView {
     }
 
     private void loadLastTimeSpan() {
-        TimeSpan lastTimeSpan = TimeSpan.valueOf(AppSettings.getString(this, Constants.LAST_TIMESPAN, TimeSpan.DAY_30.getValue()));
+        TimeSpan lastTimeSpan = TimeSpan.fromValue(AppSettings.getString(this, Constants.LAST_TIMESPAN, TimeSpan.DAY_30.getValue()));
 
-        mTimeSpan.setAdapter(new ArrayAdapter<TimeSpan>(this, android.R.layout.simple_spinner_dropdown_item, TimeSpan.values()));
+        mTimeSpan.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, TimeSpan.getValues()));
         mTimeSpan.setSelection(lastTimeSpan.getPosition());
     }
 
@@ -110,15 +110,16 @@ public class MainActivity extends BaseActivity implements MainView {
         saveLastTimeSpan(timeSpan);
 
 
+        mGraph.addSeries(s);
     }
 
     private void saveLastTimeSpan(TimeSpan timeSpan) {
-        AppSettings.setValue(this, Constants.LAST_TIMESPAN, timeSpan.getPosition());
+        AppSettings.setValue(this, Constants.LAST_TIMESPAN, timeSpan.getValue());
     }
 
     @Override
     public void showMessage(String message) {
-        Snackbar.make(mRecyclerView, message, Snackbar.LENGTH_LONG).show();
+        Snackbar.make(mGraph, message, Snackbar.LENGTH_LONG).show();
     }
 
     @Override

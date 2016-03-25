@@ -20,7 +20,7 @@ public class DatabaseHelper {
     static DatabaseHelper instance;
 
     public static DatabaseHelper getInstance() {
-        if (instance != null)
+        if (instance == null)
             instance = new DatabaseHelper();
 
         return instance;

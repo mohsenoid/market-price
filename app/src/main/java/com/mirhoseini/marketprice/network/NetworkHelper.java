@@ -49,7 +49,7 @@ public class NetworkHelper {
     }
 
     public void loadMarketPriceValues(final TimeSpan timeSpan, final OnNetworkFinishedListener<RestMarketPrice> listener) {
-        Call<RestMarketPrice> valuesCall = mApi.getMarketPriceValues(timeSpan, "json");
+        Call<RestMarketPrice> valuesCall = mApi.getMarketPriceValues(timeSpan.getValue(), Constants.API_FORMAT_JSON);
         valuesCall.enqueue(new Callback<RestMarketPrice>() {
 
             @Override
