@@ -1,7 +1,6 @@
 package com.mirhoseini.marketprice.network;
 
 import com.mirhoseini.marketprice.network.model.RestMarketPrice;
-import com.mirhoseini.marketprice.utils.TimeSpan;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

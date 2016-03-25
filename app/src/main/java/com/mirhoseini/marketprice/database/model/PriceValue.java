@@ -14,9 +14,9 @@ public class PriceValue extends BaseModel {
     @PrimaryKey
     private int timeSpanId;
     @PrimaryKey
-    private long x;//timestamp
+    private long x;//Unix timestamp
     @Column
-    private float y;
+    private float y;//Price USD
 
     public PriceValue(int timeSpanId, long x, float y) {
         this.timeSpanId = timeSpanId;
