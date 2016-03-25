@@ -21,6 +21,7 @@ import java.util.TimerTask;
 public class MainPresenterImpl implements MainPresenter, OnMainFinishedListener {
     private static boolean sDoubleBackToExitPressedOnce;
     private static boolean sOfflineMessageShowedOnce;
+    private static boolean sIsLoadingData;
 
     MainInteractor mMainInteractor;
     private MainView mMainView;
@@ -30,13 +31,13 @@ public class MainPresenterImpl implements MainPresenter, OnMainFinishedListener 
 
         mMainInteractor = new MainInteractorImpl();
 
+        sDoubleBackToExitPressedOnce = false;
+        sOfflineMessageShowedOnce = false;
+        sIsLoadingData = false;
     }
 
     @Override
     public void onResume() {
-        if (mMainView != null) {
-            mMainView.showProgress();
-        }
 
         sDoubleBackToExitPressedOnce = false;
 
@@ -82,22 +83,36 @@ public class MainPresenterImpl implements MainPresenter, OnMainFinishedListener 
 
     @Override
     public void loadPriceValues(TimeSpan timeSpan, boolean isConnected) {
-        List<PriceValue> items = mMainInteractor.loadPriceValuesFromDatabase(timeSpan);
+        if (!sIsLoadingData) {
+            sIsLoadingData = true;
 
-        boolean hasData = items.size() > 0;
-
-        if (isConnected)
-            mMainInteractor.loadMarketPrice(timeSpan, this);
-        else if (hasData) {
-            mMainView.setPriceValues(timeSpan, items);
-            mMainView.hideProgress();
-            if (!sOfflineMessageShowedOnce) {
-                mMainView.showOfflineMessage();
-                sOfflineMessageShowedOnce = true;
-            }
-        } else {
             if (mMainView != null) {
-                mMainView.showConnectionError();
+                mMainView.showProgress();
+            }
+
+            List<PriceValue> items = mMainInteractor.loadPriceValuesFromDatabase(timeSpan);
+
+            boolean hasData = items.size() > 0;
+
+            if (isConnected) {
+
+                mMainInteractor.loadMarketPrice(timeSpan, this);
+
+            } else if (hasData) {
+
+                mMainView.setPriceValues(timeSpan, items);
+                mMainView.hideProgress();
+                sIsLoadingData = false;
+
+                if (!sOfflineMessageShowedOnce) {
+                    mMainView.showOfflineMessage();
+                    sOfflineMessageShowedOnce = true;
+                }
+
+            } else {
+                if (mMainView != null) {
+                    mMainView.showConnectionError();
+                }
             }
         }
     }
@@ -121,6 +136,8 @@ public class MainPresenterImpl implements MainPresenter, OnMainFinishedListener 
 
         mMainView.hideProgress();
 
+        sIsLoadingData = false;
+
     }
 
     @Override
@@ -129,5 +146,7 @@ public class MainPresenterImpl implements MainPresenter, OnMainFinishedListener 
             mMainView.showMessage(throwable.getMessage());
             mMainView.hideProgress();
         }
+
+        sIsLoadingData = false;
     }
 }

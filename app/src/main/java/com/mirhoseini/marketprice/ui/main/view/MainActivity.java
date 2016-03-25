@@ -1,9 +1,11 @@
 package com.mirhoseini.marketprice.ui.main.view;
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.Snackbar;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -11,6 +13,10 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 import com.mirhoseini.appsettings.AppSettings;
 import com.mirhoseini.marketprice.R;
 import com.mirhoseini.marketprice.database.model.PriceValue;
@@ -21,6 +27,7 @@ import com.mirhoseini.marketprice.utils.Constants;
 import com.mirhoseini.marketprice.utils.TimeSpan;
 import com.mirhoseini.utils.Utils;
 
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -36,12 +43,14 @@ public class MainActivity extends BaseActivity implements MainView {
 
     AlertDialog mInternetConnectionDialog;
 
-    @Bind(R.id.list)
-    RecyclerView mRecyclerView;
+    @Bind(R.id.graph)
+    GraphView mGraph;
     @Bind(R.id.progress)
     ProgressBar mProgressBar;
     @Bind(R.id.timespan_spinner)
     Spinner mTimeSpan;
+
+    Context mContext;
 
 
     @OnItemSelected(R.id.timespan_spinner)
@@ -53,6 +62,8 @@ public class MainActivity extends BaseActivity implements MainView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mContext = this;
 
         ButterKnife.bind(this);
 
@@ -90,7 +101,7 @@ public class MainActivity extends BaseActivity implements MainView {
     @Override
     public void showProgress() {
         mProgressBar.setVisibility(View.VISIBLE);
-        mRecyclerView.setVisibility(View.INVISIBLE);
+        mGraph.setVisibility(View.INVISIBLE);
 
         mTimeSpan.setEnabled(false);
     }
@@ -98,7 +109,7 @@ public class MainActivity extends BaseActivity implements MainView {
     @Override
     public void hideProgress() {
         mProgressBar.setVisibility(View.INVISIBLE);
-        mRecyclerView.setVisibility(View.VISIBLE);
+        mGraph.setVisibility(View.VISIBLE);
 
         mTimeSpan.setEnabled(true);
     }
@@ -109,8 +120,18 @@ public class MainActivity extends BaseActivity implements MainView {
         //Todo: load data to graph
         saveLastTimeSpan(timeSpan);
 
+        DataPoint[] data = new DataPoint[items.size()];
+        for (int i = 0; i < items.size(); i++) {
+            data[i] = new DataPoint(new Date(items.get(i).getX() * 1000), items.get(i).getY());
+        }
 
-        mGraph.addSeries(s);
+        mGraph.removeAllSeries();
+
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(data);
+        mGraph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(mContext));
+        mGraph.getGridLabelRenderer().setNumHorizontalLabels(4);
+        mGraph.addSeries(series);
+
     }
 
     private void saveLastTimeSpan(TimeSpan timeSpan) {
