@@ -16,6 +16,8 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+
+        // required to find the DBFlow's artifacts
         maven {
             url = 'https://jitpack.io'
         }
