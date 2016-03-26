@@ -32,4 +32,14 @@ public class RestPriceValue {
     public String toString() {
         return "RestPriceValues [y = " + y + ", x = " + x + "]";
     }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+
+        RestPriceValue restPriceValue = (RestPriceValue) object;
+
+        return this.getX() == restPriceValue.getX() &&  this.getY() == restPriceValue.getY();
+    }
 }

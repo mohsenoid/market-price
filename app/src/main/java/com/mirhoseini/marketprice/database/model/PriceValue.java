@@ -56,4 +56,13 @@ public class PriceValue extends BaseModel {
         return "PriceValue [timeSpanId = " + timeSpanId + ", x = " + x + ", y = " + y + "]";
     }
 
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+
+        PriceValue priceValue = (PriceValue) object;
+
+        return this.getX() == priceValue.getX() && this.getY() == priceValue.getY() && this.getTimeSpanId() == priceValue.getTimeSpanId();
+    }
 }
