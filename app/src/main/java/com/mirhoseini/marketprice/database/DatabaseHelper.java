@@ -36,4 +36,7 @@ public class DatabaseHelper {
         Delete.table(PriceValue.class, PriceValue_Table.timeSpanId.is(timeSpanId));
     }
 
+    public void insertPriceValue(PriceValue priceValue) {
+        priceValue.save();
+    }
 }
