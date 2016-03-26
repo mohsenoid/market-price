@@ -3,30 +3,28 @@ package com.mirhoseini.marketprice.widget;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.View;
 
 import com.mirhoseini.marketprice.R;
 import com.mirhoseini.marketprice.database.model.PriceValue;
 
-import java.util.ArrayList;
-import java.util.Calendar;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-import java.util.StringTokenizer;
-import java.util.Vector;
+import java.util.Locale;
 
 /**
  * Created by Mohsen on 25/03/16.
  */
 public class MyGraph extends View implements SurfaceHolder.Callback {
-    static final int STROKE_WIDTH = 4;
+    static final int LINE_WIDTH = 4;
 
     int width, height;
     int parentWidth, parentHeight;
+
+    int paddingBottom = 50;
 
 //    int xPart, yPart;
 
@@ -39,6 +37,11 @@ public class MyGraph extends View implements SurfaceHolder.Callback {
 
 
     private final Paint linePaint;
+    private final Paint axisPaint;
+    private final Paint borderPaint;
+    private final Paint textPaint;
+
+
     private float[] mPoints;
     private List<PriceValue> mPriceValues;
     private long maxX, minX;
@@ -51,7 +54,20 @@ public class MyGraph extends View implements SurfaceHolder.Callback {
 
         linePaint = new Paint();
         linePaint.setColor(getResources().getColor(R.color.colorPrimary));
-        linePaint.setStrokeWidth(STROKE_WIDTH);
+        linePaint.setStrokeWidth(LINE_WIDTH);
+
+        borderPaint = new Paint();
+        borderPaint.setColor(getResources().getColor(R.color.colorAccent));
+        borderPaint.setStrokeWidth(5);
+
+        axisPaint = new Paint();
+        axisPaint.setColor(getResources().getColor(R.color.colorAccent));
+        axisPaint.setStrokeWidth(1);
+
+        textPaint = new Paint();
+        textPaint.setColor(getResources().getColor(R.color.colorAccent));
+        textPaint.setTextSize(30);
+
     }
 
     public List<PriceValue> getPriceValues() {
@@ -90,8 +106,11 @@ public class MyGraph extends View implements SurfaceHolder.Callback {
                 minY = Math.min(minY, mPriceValues.get(i).getY());
             }
 
+            maxY = (float) Math.ceil(maxY);
+            minY = (float) Math.floor(minY);
+
             xFactor = (float) width / (float) mPriceValues.size();
-            yFactor = (float) height / (float) (Math.ceil(maxY) - Math.floor(minY));
+            yFactor = (float) height / (maxY - minY);
 
             mPoints = new float[(mPriceValues.size() - 1) * 4];
 
@@ -118,16 +137,47 @@ public class MyGraph extends View implements SurfaceHolder.Callback {
     }
 
     private void drawGraphBorders(Canvas canvas) {
+
+        //draw borders
+        canvas.drawLine(left, top, left, bottom, borderPaint);
+        canvas.drawLine(left, bottom, right, bottom, borderPaint);
+
+        //draw axis
+        float axisY = minY;
+        int stepY = (int) (maxY - minY) / 5;
+
+        while (axisY < maxY) {
+            float y = height - (axisY - minY) * yFactor;
+            canvas.drawLine(left, y, right, y, axisPaint);
+
+            canvas.drawText(axisY + " USD", left + 5, y - 5, textPaint);
+
+            axisY += stepY;
+        }
+
+        int axisX = 0;
+        int stepX = mPriceValues.size() / 3;
+
+        while (axisX < mPriceValues.size()) {
+            float x = axisX * xFactor;
+            canvas.drawLine(x, top, x, bottom, axisPaint);
+
+            SimpleDateFormat sdf = new SimpleDateFormat("MMM d, ''yy");
+
+            canvas.drawText(sdf.format(new Date(mPriceValues.get(axisX).getX() * 1000)), x, bottom + paddingBottom / 2 + 5, textPaint);
+            axisX += stepX;
+        }
+
     }
 
     private void initView() {
         width = getWidth();
-        height = getHeight();
+        height = getHeight() - paddingBottom;
 
-        left = 0;// paddingLeft;
-        top = 0;// paddingTop;
-        bottom = height;// - paddingBottom;
-        right = width;// - paddingRight;
+        left = 0;
+        top = 0;
+        bottom = height;
+        right = width;
     }
 
     @Override
@@ -161,53 +211,53 @@ public class MyGraph extends View implements SurfaceHolder.Callback {
     }
 
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        int x = (int) event.getX();
-        int y = (int) event.getY();
-
-        switch (event.getAction() & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN:
-                startX = event.getX() - previousTranslateX;
-                startY = event.getY() - previousTranslateY;
-
-                // Log.d(TAG, "Touch X : " + x + " Touch Y : " + y);
-                break;
-            case MotionEvent.ACTION_UP:
-                if (!isScrolling) {
-                    isScrolling = false;
-                    return true;
-                }
-            case MotionEvent.ACTION_CANCEL:
-                // Release the scroll.
-                isScrolling = false;
-                return false;
-            case MotionEvent.ACTION_MOVE:
-                deltaX = event.getX() - startX;
-                deltaY = event.getY() - startY;
-
-                startX = event.getX();
-                startY = event.getY();
-                // Log.d(TAG, "Move deltaX : " + deltaX + " Move deltaY : " +
-                // deltaY);
-
-                int yScroll = getScrollY();
-
-                if (Math.abs(deltaY) > 5 || isScrolling) {
-                    isScrolling = true;
-                    yScroll -= deltaY;
-
-                    if (yScroll <= 0)
-                        yScroll = 0;
-
-                    else if (yScroll >= height - parentHeight)
-                        yScroll = (height - parentHeight);
-
-                    scrollTo(0, yScroll);
-                }
-                break;
-        }
-        return true;
-    }
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        int x = (int) event.getX();
+//        int y = (int) event.getY();
+//
+//        switch (event.getAction() & MotionEvent.ACTION_MASK) {
+//            case MotionEvent.ACTION_DOWN:
+//                startX = event.getX() - previousTranslateX;
+//                startY = event.getY() - previousTranslateY;
+//
+//                // Log.d(TAG, "Touch X : " + x + " Touch Y : " + y);
+//                break;
+//            case MotionEvent.ACTION_UP:
+//                if (!isScrolling) {
+//                    isScrolling = false;
+//                    return true;
+//                }
+//            case MotionEvent.ACTION_CANCEL:
+//                // Release the scroll.
+//                isScrolling = false;
+//                return false;
+//            case MotionEvent.ACTION_MOVE:
+//                deltaX = event.getX() - startX;
+//                deltaY = event.getY() - startY;
+//
+//                startX = event.getX();
+//                startY = event.getY();
+//                // Log.d(TAG, "Move deltaX : " + deltaX + " Move deltaY : " +
+//                // deltaY);
+//
+//                int yScroll = getScrollY();
+//
+//                if (Math.abs(deltaY) > 5 || isScrolling) {
+//                    isScrolling = true;
+//                    yScroll -= deltaY;
+//
+//                    if (yScroll <= 0)
+//                        yScroll = 0;
+//
+//                    else if (yScroll >= height - parentHeight)
+//                        yScroll = (height - parentHeight);
+//
+//                    scrollTo(0, yScroll);
+//                }
+//                break;
+//        }
+//        return true;
+//    }
 
 }
