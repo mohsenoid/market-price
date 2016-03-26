@@ -7,16 +7,15 @@ import com.mirhoseini.marketprice.network.model.RestPriceValue;
 import com.mirhoseini.marketprice.ui.main.presenter.MainPresenterImpl;
 import com.mirhoseini.marketprice.utils.TimeSpan;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.CoreMatchers.*;
+import static org.mockito.Mockito.*;
+
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.sql.Time;
 
