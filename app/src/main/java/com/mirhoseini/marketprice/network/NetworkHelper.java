@@ -33,7 +33,7 @@ public class NetworkHelper {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.connectTimeout(30, TimeUnit.SECONDS);
 
-        //show retrofit logs if app is Debug
+        //show retrofit logs if app is in Debug
         if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -50,6 +50,7 @@ public class NetworkHelper {
     public static NetworkHelper getInstance() {
         if (instance == null)
             instance = new NetworkHelper();
+
         return instance;
     }
 
@@ -65,7 +66,7 @@ public class NetworkHelper {
                     }
                 } else {
                     if (listener != null)
-                        listener.onError(timeSpan, new Exception("Response is not successful!"));
+                        listener.onError(timeSpan, new Exception("API response is not success!!"));
                 }
             }
 

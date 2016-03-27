@@ -12,6 +12,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // can be used for general purpose in all Activities of Application
+
     }
 
 }

@@ -40,11 +40,6 @@ public class MainPresenterImpl implements MainPresenter, OnMainNetworkFinishedLi
     }
 
     @Override
-    public void onTimeSpanChanged(TimeSpan timeSpan) {
-
-    }
-
-    @Override
     public void onDestroy() {
         //delete all references with UI destruction
         mMainView = null;
@@ -54,6 +49,7 @@ public class MainPresenterImpl implements MainPresenter, OnMainNetworkFinishedLi
 
     @Override
     public boolean onBackPressed() {
+        // check for double back press to exit
         if (sDoubleBackToExitPressedOnce) {
             if (mMainView != null) {
                 mMainView.exit();
@@ -101,12 +97,12 @@ public class MainPresenterImpl implements MainPresenter, OnMainNetworkFinishedLi
 
             }
 
-
-            if (isConnected) { //load data from network
+            //load data from network
+            if (isConnected) {
 
                 mMainInteractor.loadMarketPrice(timeSpan, this);
 
-            } else if (hasData) {// show offline message if has cache data and is first time
+            } else if (hasData) {// show offline message if cache data is available in Database
 
                 if (mMainView != null) {
                     mMainView.showOfflineMessage();

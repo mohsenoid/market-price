@@ -31,6 +31,7 @@ public class MainInteractorImpl implements MainInteractor {
     public void loadMarketPrice(TimeSpan timeSpan, final OnMainNetworkFinishedListener listener) {
         if (mNetworkHelper != null) {//check if object is not destroyed
 
+            // load Market Price data from network
             mNetworkHelper.loadMarketPriceValues(timeSpan, new OnNetworkFinishedListener<RestMarketPrice>() {
                 @Override
                 public void onSuccess(TimeSpan timeSpan, RestMarketPrice restResponse) {
@@ -54,6 +55,7 @@ public class MainInteractorImpl implements MainInteractor {
 
         if (mDatabaseHelper != null) {//check if object is not destroyed
 
+            //load Priva Values from database
             items = mDatabaseHelper.loadPriceValues(timeSpan.getPosition());
 
         }
@@ -65,6 +67,7 @@ public class MainInteractorImpl implements MainInteractor {
     public void deletePriceValues(TimeSpan timeSpan) {
         if (mDatabaseHelper != null) {//check if object is not destroyed
 
+            // delete a specific TimeSpan cached data from Database
             mDatabaseHelper.deletePriceValues(timeSpan.getPosition());
 
         }
@@ -78,6 +81,7 @@ public class MainInteractorImpl implements MainInteractor {
 
     @Override
     public void saveMarketPrice(final TimeSpan timeSpan, final RestMarketPrice restMarketPrice, final OnMainDatabaseFinishedListener listener) {
+        // using AsyncTask to avoid main thread stock to this long lasting process for big amount of data
         new AsyncTask<Void, Void, Void>() {
 
             @Override

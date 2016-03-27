@@ -10,6 +10,7 @@ import com.mirhoseini.marketprice.utils.TimeSpan;
 public class RestModelConverter {
 
     public static PriceValue convertRestModelToPriceValue(TimeSpan timeSpan, RestPriceValue restPriceValue) {
+        // convert Rest response model to Database model
         return new PriceValue(timeSpan.getPosition(), Long.parseLong(restPriceValue.getX()), Float.parseFloat(restPriceValue.getY()));
     }
 }

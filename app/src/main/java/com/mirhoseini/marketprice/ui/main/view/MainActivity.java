@@ -70,16 +70,15 @@ public class MainActivity extends BaseActivity implements MainView {
             lastTimeSpan = savedInstanceState.getInt(Constants.LAST_TIMESPAN);
 
         loadTimeSpanSpinnerData(lastTimeSpan);
-        
     }
 
+    //load TimeSpan Spinner data using static enum values
     private void loadTimeSpanSpinnerData(int savedTimeSpan) {
-        TimeSpan lastTimeSpan = TimeSpan.fromPosition(savedTimeSpan);
 
         mTimeSpan.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, TimeSpan.getValues()));
-        mTimeSpan.setSelection(lastTimeSpan.getPosition());
+        mTimeSpan.setSelection(savedTimeSpan);
 
-        //set onItemSelectedListener after spinner data adapter loaded and avoid unwanted loadPriceValues before item selected
+        //set onItemSelectedListener after spinner adapter data loaded to avoid unwanted call before item selected
         mTimeSpan.post(new Runnable() {
             @Override
             public void run() {
@@ -104,6 +103,7 @@ public class MainActivity extends BaseActivity implements MainView {
         super.onResume();
         mMainPresenter.onResume();
 
+        // dismiss no internet connection dialog in case of connection fixed
         if (mInternetConnectionDialog != null)
             mInternetConnectionDialog.dismiss();
 
@@ -113,35 +113,24 @@ public class MainActivity extends BaseActivity implements MainView {
 
     @Override
     protected void onDestroy() {
-
         mMainPresenter.onDestroy();
         super.onDestroy();
-
     }
 
     @Override
     public void showProgress() {
-
         mProgress.setVisibility(View.VISIBLE);
         mGraph.setVisibility(View.INVISIBLE);
-
-//        mTimeSpan.setEnabled(false);
-
     }
 
     @Override
     public void hideProgress() {
-
         mProgress.setVisibility(View.INVISIBLE);
-
-//        mTimeSpan.setEnabled(true);
-
     }
 
 
     @Override
     public void setPriceValues(TimeSpan timeSpan, List<PriceValue> items) {
-
         //check if loaded items are the same as current request
         if (timeSpan == TimeSpan.values()[mTimeSpan.getSelectedItemPosition()]) {
 
@@ -150,26 +139,28 @@ public class MainActivity extends BaseActivity implements MainView {
             mGraph.setPriceValues(items);
             mGraph.setVisibility(View.VISIBLE);
 
+            //used jjoe64 graphview before preparing my own Graph View
+            /*
+            DataPoint[] data = new DataPoint[items.size()];
+            for (int i = 0; i < items.size(); i++) {
+                data[i] = new DataPoint(new Date(items.get(i).getX() * 1000), items.get(i).getY());
+            }
 
-//        DataPoint[] data = new DataPoint[items.size()];
-//        for (int i = 0; i < items.size(); i++) {
-//            data[i] = new DataPoint(new Date(items.get(i).getX() * 1000), items.get(i).getY());
-//        }
+            mGraph.removeAllSeries();
 
-//        mGraph.removeAllSeries();
-//
-//        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(data);
-//
-//        mGraph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(mContext));
-//        mGraph.getGridLabelRenderer().setNumHorizontalLabels(4);
-//        mGraph.getViewport().setScalable(true);
-//        mGraph.getViewport().setScrollable(true);
-//        mGraph.addSeries(series);
+            LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(data);
 
+            mGraph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(mContext));
+            mGraph.getGridLabelRenderer().setNumHorizontalLabels(4);
+            mGraph.getViewport().setScalable(true);
+            mGraph.getViewport().setScrollable(true);
+            mGraph.addSeries(series);
+            */
         }
 
     }
 
+    // save user last selected TimeSpan
     private void saveLastTimeSpan(TimeSpan timeSpan) {
         AppSettings.setValue(this, Constants.LAST_TIMESPAN, timeSpan.getPosition());
     }

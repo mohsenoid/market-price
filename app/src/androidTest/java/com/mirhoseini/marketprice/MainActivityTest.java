@@ -21,10 +21,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 
 
 /**
- * Created by Mohsen on 3/26/16.
+ * Created by Mohsen on 24/03/16.
  */
-//@RunWith(AndroidJUnit4.class)
-//@LargeTest
 public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
     private MainActivity mActivity;

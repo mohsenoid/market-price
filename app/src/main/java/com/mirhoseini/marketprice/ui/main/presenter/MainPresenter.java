@@ -9,8 +9,6 @@ public interface MainPresenter {
 
     void onResume();
 
-    void onTimeSpanChanged(TimeSpan timeSpan);
-
     void onDestroy();
 
     boolean onBackPressed();

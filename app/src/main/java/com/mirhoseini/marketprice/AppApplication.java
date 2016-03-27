@@ -18,7 +18,7 @@ public class AppApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        // init database
+        // init DBFlow ORM database
         FlowManager.init(this);
 
     }

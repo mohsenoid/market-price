@@ -26,8 +26,6 @@ public class MyGraph extends View implements SurfaceHolder.Callback {
 
     int paddingBottom = 50;
 
-//    int xPart, yPart;
-
     int left, top, bottom, right;
 
     float startX, startY, deltaX, deltaY;
@@ -210,7 +208,7 @@ public class MyGraph extends View implements SurfaceHolder.Callback {
     public void surfaceDestroyed(SurfaceHolder holder) {
     }
 
-
+    // tried to implement scroll for the Graph but no time left!! :)
 //    @Override
 //    public boolean onTouchEvent(MotionEvent event) {
 //        int x = (int) event.getX();
