@@ -30,7 +30,6 @@ This application was created by [Mohsen Mirhoseini Argi](http://mirhoseini.com),
 * AndroidUtils v1.0.0
 * jUnit v4.12
 * Mockito v1.10.19
-* Espresso v2.2.1
 
 --------------------
 ### Important Notes ###
