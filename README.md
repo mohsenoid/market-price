@@ -29,6 +29,7 @@ This application was created by [Mohsen Mirhoseini Argi](http://mirhoseini.com),
 * AppSettings v1.0.0
 * AndroidUtils v1.0.0
 * jUnit v4.12
+* Android Test v0.4.1
 * Mockito v1.10.19
 
 --------------------
