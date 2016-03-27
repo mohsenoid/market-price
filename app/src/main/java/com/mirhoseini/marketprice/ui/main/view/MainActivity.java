@@ -29,7 +29,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnItemSelected;
 
 /**
  * Created by Mohsen on 24/03/16.
@@ -58,22 +57,23 @@ public class MainActivity extends BaseActivity implements MainView {
 
         mContext = this;
 
+        mMainPresenter = new MainPresenterImpl(this);
+
+        // binding Views using ButterKnife library
         ButterKnife.bind(this);
 
         int lastTimeSpan;
 
         if (savedInstanceState == null) //load lastTimeSpan from SharePreferences
             lastTimeSpan = AppSettings.getInt(this, Constants.LAST_TIMESPAN, TimeSpan.DAY_30.getPosition());
-        else //load lastTimeSpan from saved before UI change
+        else //load lastTimeSpan from saved state before UI change
             lastTimeSpan = savedInstanceState.getInt(Constants.LAST_TIMESPAN);
 
-        loadTimeSpanSpinner(lastTimeSpan);
-
-        mMainPresenter = new MainPresenterImpl(this);
-
+        loadTimeSpanSpinnerData(lastTimeSpan);
+        
     }
 
-    private void loadTimeSpanSpinner(int savedTimeSpan) {
+    private void loadTimeSpanSpinnerData(int savedTimeSpan) {
         TimeSpan lastTimeSpan = TimeSpan.fromPosition(savedTimeSpan);
 
         mTimeSpan.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, TimeSpan.getValues()));
@@ -125,7 +125,7 @@ public class MainActivity extends BaseActivity implements MainView {
         mProgress.setVisibility(View.VISIBLE);
         mGraph.setVisibility(View.INVISIBLE);
 
-        mTimeSpan.setEnabled(false);
+//        mTimeSpan.setEnabled(false);
 
     }
 
@@ -133,9 +133,8 @@ public class MainActivity extends BaseActivity implements MainView {
     public void hideProgress() {
 
         mProgress.setVisibility(View.INVISIBLE);
-        mGraph.setVisibility(View.VISIBLE);
 
-        mTimeSpan.setEnabled(true);
+//        mTimeSpan.setEnabled(true);
 
     }
 
@@ -143,9 +142,14 @@ public class MainActivity extends BaseActivity implements MainView {
     @Override
     public void setPriceValues(TimeSpan timeSpan, List<PriceValue> items) {
 
-        saveLastTimeSpan(timeSpan);
+        //check if loaded items are the same as current request
+        if (timeSpan == TimeSpan.values()[mTimeSpan.getSelectedItemPosition()]) {
 
-        mGraph.setPriceValues(items);
+            saveLastTimeSpan(timeSpan);
+
+            mGraph.setPriceValues(items);
+            mGraph.setVisibility(View.VISIBLE);
+
 
 //        DataPoint[] data = new DataPoint[items.size()];
 //        for (int i = 0; i < items.size(); i++) {
@@ -161,6 +165,8 @@ public class MainActivity extends BaseActivity implements MainView {
 //        mGraph.getViewport().setScalable(true);
 //        mGraph.getViewport().setScrollable(true);
 //        mGraph.addSeries(series);
+
+        }
 
     }
 
@@ -207,7 +213,7 @@ public class MainActivity extends BaseActivity implements MainView {
         if (mInternetConnectionDialog != null)
             mInternetConnectionDialog.dismiss();
 
-        mInternetConnectionDialog = Utils.showNoInternetConnectionDialog(this, true);
+        mInternetConnectionDialog = Utils.showNoInternetConnectionDialog(this, false);
     }
 
     @Override

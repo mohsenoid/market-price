@@ -58,7 +58,7 @@ public class MyGraph extends View implements SurfaceHolder.Callback {
 
         borderPaint = new Paint();
         borderPaint.setColor(getResources().getColor(R.color.colorAccent));
-        borderPaint.setStrokeWidth(5);
+        borderPaint.setStrokeWidth(6);
 
         axisPaint = new Paint();
         axisPaint.setColor(getResources().getColor(R.color.colorAccent));
