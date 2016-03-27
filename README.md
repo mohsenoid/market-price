@@ -7,7 +7,7 @@ This application was created by Mohsen Mirhoseini Argi, as part of the technical
 
 * Market Price Android Application
 * v1.0
-* Last Update : Sun Mar 27, 2016 07:17a.m
+* Last Update : Sun Mar 27, 2016
 
 ### Development Tools ###
 
