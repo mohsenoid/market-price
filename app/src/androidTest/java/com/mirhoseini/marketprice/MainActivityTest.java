@@ -9,8 +9,6 @@ import com.mirhoseini.marketprice.utils.TimeSpan;
 
 import org.junit.Test;
 
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-
 
 /**
  * Created by Mohsen on 24/03/16.

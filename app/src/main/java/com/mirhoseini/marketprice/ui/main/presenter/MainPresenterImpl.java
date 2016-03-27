@@ -6,7 +6,6 @@ import com.mirhoseini.marketprice.ui.main.model.MainInteractor;
 import com.mirhoseini.marketprice.ui.main.model.MainInteractorImpl;
 import com.mirhoseini.marketprice.ui.main.model.OnMainDatabaseFinishedListener;
 import com.mirhoseini.marketprice.ui.main.model.OnMainNetworkFinishedListener;
-import com.mirhoseini.marketprice.ui.main.view.MainActivity;
 import com.mirhoseini.marketprice.ui.main.view.MainView;
 import com.mirhoseini.marketprice.utils.TimeSpan;
 

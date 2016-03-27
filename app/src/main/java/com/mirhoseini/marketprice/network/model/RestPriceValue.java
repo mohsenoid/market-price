@@ -40,6 +40,6 @@ public class RestPriceValue {
 
         RestPriceValue restPriceValue = (RestPriceValue) object;
 
-        return this.getX() == restPriceValue.getX() &&  this.getY() == restPriceValue.getY();
+        return this.getX() == restPriceValue.getX() && this.getY() == restPriceValue.getY();
     }
 }

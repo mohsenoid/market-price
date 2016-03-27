@@ -13,33 +13,24 @@ import com.mirhoseini.marketprice.database.model.PriceValue;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by Mohsen on 25/03/16.
  */
 public class MyGraph extends View implements SurfaceHolder.Callback {
     static final int LINE_WIDTH = 4;
-
-    int width, height;
-    int parentWidth, parentHeight;
-
-    int paddingBottom = 50;
-
-    int left, top, bottom, right;
-
-    float startX, startY, deltaX, deltaY;
-    float previousTranslateX = 0f;
-    float previousTranslateY = 0f;
-    boolean isScrolling = false;
-
-
     private final Paint linePaint;
     private final Paint axisPaint;
     private final Paint borderPaint;
     private final Paint textPaint;
-
-
+    int width, height;
+    int parentWidth, parentHeight;
+    int paddingBottom = 50;
+    int left, top, bottom, right;
+    float startX, startY, deltaX, deltaY;
+    float previousTranslateX = 0f;
+    float previousTranslateY = 0f;
+    boolean isScrolling = false;
     private float[] mPoints;
     private List<PriceValue> mPriceValues;
     private long maxX, minX;

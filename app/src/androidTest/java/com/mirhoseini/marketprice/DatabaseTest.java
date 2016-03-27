@@ -1,34 +1,16 @@
 package com.mirhoseini.marketprice;
 
 import android.content.Context;
-import android.test.ActivityInstrumentationTestCase2;
-import android.test.ActivityTestCase;
-import android.test.AndroidTestRunner;
-import android.test.ApplicationTestCase;
 import android.test.InstrumentationTestCase;
-import android.test.InstrumentationTestRunner;
-import android.test.mock.MockContext;
 
 import com.mirhoseini.marketprice.database.DatabaseHelper;
 import com.mirhoseini.marketprice.database.model.PriceValue;
-import com.mirhoseini.marketprice.network.NetworkHelper;
-import com.mirhoseini.marketprice.network.OnNetworkFinishedListener;
-import com.mirhoseini.marketprice.network.model.RestMarketPrice;
-import com.mirhoseini.marketprice.ui.main.view.MainActivity;
 import com.mirhoseini.marketprice.utils.TimeSpan;
 import com.raizlabs.android.dbflow.config.FlowManager;
 
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-import java.util.Calendar;
 import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Mohsen on 24/03/16.
