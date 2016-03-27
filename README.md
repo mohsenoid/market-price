@@ -1,14 +1,16 @@
-#Market Price#
+### Market Price Android Application ###
 
 This repository holds the source code of the Market Price Application, a simple Android client for the [Blockchain Market Price Graph](https://blockchain.info/charts/market-price).
 This application was created by [Mohsen Mirhoseini Argi](http://mirhoseini.com), as part of the technical assessment by the [Number26](http://number26.de) team.
 
+--------------------
 ### What is this repository for? ###
 
 * Market Price Android Application
 * v1.0
 * Last Update : Sun Mar 27, 2016
 
+--------------------
 ### Development Tools ###
 
 * Android Studio v2.0 Beta 7
@@ -16,6 +18,7 @@ This application was created by [Mohsen Mirhoseini Argi](http://mirhoseini.com),
 * Android SDK Build Tools 23.0.2
 * CompileSDKVersion 23
 
+--------------------
 ### Dependencies ###
 
 * Android Support Tools v23.1.1
@@ -29,6 +32,7 @@ This application was created by [Mohsen Mirhoseini Argi](http://mirhoseini.com),
 * Mockito v1.10.19
 * Espresso v2.2.1
 
+--------------------
 ### Important Notes ###
 
 The application has one Main Activity which is responsible for presenting data for a specific time span as a Graph view.
