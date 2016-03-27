@@ -56,8 +56,7 @@ public class NetworkTest {
 //
 //            @Override
 //            public Void answer(InvocationOnMock invocation) throws Throwable {
-//                // TODO Auto-generated method stub
-//                invocation.getArguments()[0].equals(timeSpan);
+//
 //                return null;
 //            }
 //        }).when(onNetworkFinishedListener).onSuccess(eq(timeSpan), any(RestMarketPrice.class));
@@ -66,17 +65,17 @@ public class NetworkTest {
 //
 //            @Override
 //            public Void answer(InvocationOnMock invocation) throws Throwable {
-//                // TODO Auto-generated method stub
+//
 //                return null;
 //            }
 //        }).when(onNetworkFinishedListener).onError(eq(timeSpan), any(Throwable.class));
 
         networkHelper.loadMarketPriceValues(timeSpan, onNetworkFinishedListener);
 
-        //wait as network timeout
+        //wait for network timeout
         Thread.sleep(30 * 1000);
 
-        // verifies the onSuccess() method was called
+        // verify if onSuccess() method was fired once and no onError()
         verify(onNetworkFinishedListener, times(1)).onSuccess(eq(timeSpan), any(RestMarketPrice.class));
         verify(onNetworkFinishedListener, times(0)).onError(eq(timeSpan), any(Throwable.class));
 
