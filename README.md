@@ -55,7 +55,7 @@ The model (MainInteractor), would only be the gateway to the domain layer or bus
 
 The networking and API call are managed by [Retrofit](http://square.github.io/retrofit/) and OkHttp as its httpclient, contributed by [Square](http://square.github.io). It also shows decent logs while application is running in Debug mode.
 
-The database is managed by [DBFlow](https://github.com/Raizlabs/DBFlow) as ORM database library, contributed by [Andrew Grosner](https://github.com/agrosner).
+The database is managed by [DBFlow](https://github.com/Raizlabs/DBFlow) as ORM database library, contributed by [Andrew Grosner](https://github.com/agrosner), and for more data security, all cached data is encrypted using [SQLCipher](https://github.com/sqlcipher/android-database-sqlcipher) contributed by [Zetetic LLC](https://www.zetetic.net/sqlcipher/sqlcipher-for-android/).
 
 The settings of the application is persisted using AppSetting library, a wrapper for Android SharedPreferences, which takes advantage of HashMaps for faster save and retrieval from memory, developed and published on jCenter by myself.
 
