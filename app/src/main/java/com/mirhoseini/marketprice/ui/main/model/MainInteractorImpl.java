@@ -89,7 +89,9 @@ public class MainInteractorImpl implements MainInteractor {
                 deletePriceValues(timeSpan);
 
                 for (RestPriceValue restPriceValue : restMarketPrice.getValues()) {
-                    mDatabaseHelper.insertPriceValue(RestModelConverter.convertRestModelToPriceValue(timeSpan, restPriceValue));
+                    if (mDatabaseHelper != null) {//check if object is not destroyed
+                        mDatabaseHelper.insertPriceValue(RestModelConverter.convertRestModelToPriceValue(timeSpan, restPriceValue));
+                    }
                 }
                 return null;
             }
