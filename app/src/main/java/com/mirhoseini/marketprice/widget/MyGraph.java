@@ -136,7 +136,7 @@ public class MyGraph extends View implements SurfaceHolder.Callback {
         int stepY = (int) (maxY - minY) / 5;
 
         // one value bug fix
-        stepY = stepY != 0 ? stepY : 1;
+        stepY = stepY != 0 ? stepY : (int) maxY;
 
         while (axisY < maxY) {
             float y = height - (axisY - minY) * yFactor;
