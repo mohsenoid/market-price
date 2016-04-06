@@ -29,11 +29,13 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 /**
  * Created by Mohsen on 24/03/16.
  */
 public class MainActivity extends BaseActivity implements MainView {
+    public static final String TAG = MainActivity.class.getSimpleName();
 
     MainPresenter mMainPresenter;
 
@@ -62,18 +64,23 @@ public class MainActivity extends BaseActivity implements MainView {
         // binding Views using ButterKnife library
         ButterKnife.bind(this);
 
+        Timber.tag(TAG);
+        Timber.d("Activity Created");
+
         int lastTimeSpan;
 
-        if (savedInstanceState == null) //load lastTimeSpan from SharePreferences
+        if (savedInstanceState == null) { //load lastTimeSpan from SharePreferences
             lastTimeSpan = AppSettings.getInt(this, Constants.LAST_TIMESPAN, TimeSpan.DAY_30.getPosition());
-        else //load lastTimeSpan from saved state before UI change
+        } else { //load lastTimeSpan from saved state before UI change
             lastTimeSpan = savedInstanceState.getInt(Constants.LAST_TIMESPAN);
+        }
 
         loadTimeSpanSpinnerData(lastTimeSpan);
     }
 
     //load TimeSpan Spinner data using static enum values
     private void loadTimeSpanSpinnerData(int savedTimeSpan) {
+        Timber.d("loading TimeSpan Spinner");
 
         mTimeSpan.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, TimeSpan.getValues()));
         mTimeSpan.setSelection(savedTimeSpan);
@@ -100,6 +107,8 @@ public class MainActivity extends BaseActivity implements MainView {
 
     @Override
     protected void onResume() {
+        Timber.d("Activity Resumed");
+
         super.onResume();
         mMainPresenter.onResume();
 
@@ -113,24 +122,32 @@ public class MainActivity extends BaseActivity implements MainView {
 
     @Override
     protected void onDestroy() {
+        Timber.d("Activity Destroyed");
+
         mMainPresenter.onDestroy();
         super.onDestroy();
     }
 
     @Override
     public void showProgress() {
+        Timber.d("Showing Progress");
+
         mProgress.setVisibility(View.VISIBLE);
         mGraph.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void hideProgress() {
+        Timber.d("Hiding Progress");
+
         mProgress.setVisibility(View.INVISIBLE);
     }
 
 
     @Override
     public void setPriceValues(TimeSpan timeSpan, List<PriceValue> items) {
+        Timber.d("Setting TimeSpan: %s Price Values: %s", timeSpan.getValue(), items.toString());
+
         //check if loaded items are the same as current request
         if (timeSpan == TimeSpan.values()[mTimeSpan.getSelectedItemPosition()]) {
 
@@ -162,21 +179,29 @@ public class MainActivity extends BaseActivity implements MainView {
 
     // save user last selected TimeSpan
     private void saveLastTimeSpan(TimeSpan timeSpan) {
+        Timber.d("Saving Last TimeSpan");
+
         AppSettings.setValue(this, Constants.LAST_TIMESPAN, timeSpan.getPosition());
     }
 
     @Override
     public void showToastMessage(String message) {
+        Timber.d("Showing Toast Message: %s", message);
+
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void showProgressMessage(String message) {
+        Timber.d("Showing Progress Message: %s", message);
+
         mProgressMessage.setText(message);
     }
 
     @Override
     public void showOfflineMessage() {
+        Timber.d("Showing Offline Message");
+
         Snackbar.make(mGraph, R.string.offline_message, Snackbar.LENGTH_LONG)
                 .setAction(R.string.go_online, new View.OnClickListener() {
                     @Override
@@ -191,16 +216,22 @@ public class MainActivity extends BaseActivity implements MainView {
 
     @Override
     public void exit() {
+        Timber.d("Exiting");
+
         Utils.exit(this);
     }
 
     @Override
     public void showExitMessage() {
+        Timber.d("Showing Exit Message");
+
         Toast.makeText(this, R.string.msg_exit, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void showConnectionError() {
+        Timber.d("Showing Connection Error Message");
+
         if (mInternetConnectionDialog != null)
             mInternetConnectionDialog.dismiss();
 
@@ -209,6 +240,8 @@ public class MainActivity extends BaseActivity implements MainView {
 
     @Override
     public void showRetryMessage() {
+        Timber.d("Showing Retry Message");
+
         Snackbar.make(mGraph, R.string.retry_message, Snackbar.LENGTH_LONG)
                 .setAction(R.string.load_retry, new View.OnClickListener() {
                     @Override
@@ -222,6 +255,8 @@ public class MainActivity extends BaseActivity implements MainView {
 
     @Override
     public void onBackPressed() {
+        Timber.d("Activity Back Pressed");
+
         if (mMainPresenter.onBackPressed()) {
             super.onBackPressed();
         }
@@ -229,6 +264,8 @@ public class MainActivity extends BaseActivity implements MainView {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        Timber.d("Activity Saving Instance State");
+
         super.onSaveInstanceState(outState);
 
         //save TimeSpan selected by user before data loaded and saved to SharedPreferences

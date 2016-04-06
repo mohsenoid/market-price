@@ -13,11 +13,15 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import timber.log.Timber;
+
 
 /**
  * Created by Mohsen on 24/03/16.
  */
 public class MainPresenterImpl implements MainPresenter, OnMainNetworkFinishedListener {
+    public static final String TAG = MainPresenterImpl.class.getSimpleName();
+
     private static boolean sDoubleBackToExitPressedOnce;
 
     MainInteractor mMainInteractor;
@@ -27,6 +31,8 @@ public class MainPresenterImpl implements MainPresenter, OnMainNetworkFinishedLi
         this.mMainView = mainView;
 
         mMainInteractor = new MainInteractorImpl();
+
+        Timber.tag(TAG);
 
         sDoubleBackToExitPressedOnce = false;
     }
@@ -75,6 +81,7 @@ public class MainPresenterImpl implements MainPresenter, OnMainNetworkFinishedLi
 
     @Override
     public void loadPriceValues(TimeSpan timeSpan, boolean isConnected) {
+        Timber.d("Loading Price Values");
 
         if (mMainView != null) {
             mMainView.showProgress();
@@ -89,6 +96,8 @@ public class MainPresenterImpl implements MainPresenter, OnMainNetworkFinishedLi
 
             //load cache data from database
             if (hasData) {
+                Timber.d("Cache data is available in Database");
+
                 if (mMainView != null) {
                     mMainView.setPriceValues(timeSpan, items);
                     mMainView.hideProgress();
